@@ -1,4 +1,4 @@
-name: Deploy EliteWalk Next.js App
+name: Deploy EliteWalk Next.js to EC2
 
 on:
   push:
@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Setup Node.js
@@ -21,10 +21,10 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Build Next.js app
+      - name: Build Next.js application
         run: npm run build
 
-      - name: Deploy to EC2 using SSH
+      - name: Deploy to EC2 via SSH
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.EC2_HOST }}
@@ -36,5 +36,5 @@ jobs:
             npm install
             npm run build
             pm2 delete elitewalk || true
-            pm2 start npm --name elitewalk -- start
+            pm2 start npm --name "elitewalk" -- start
             pm2 save
